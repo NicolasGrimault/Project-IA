@@ -23,6 +23,17 @@ train['extraction_type'] = train['extraction_type'].map(extraction_type).astype(
 # Drop useless data
 train = train.drop(["id","num_private","recorded_by"], axis = 1)
 
+# %%
+# Replace date
+import numpy as np
+
+foo = np.array(train['construction_year'])
+avg = np.mean(foo[foo > 0])
+std = np.std(foo[foo > 0])
+count = len(foo[foo == 0])
+random_list = np.random.randint(avg - std, avg + std, size=count)
+train.loc[train['construction_year'] == 0,'construction_year'] = random_list
+
 #%%
 # Split data to train and test
 from sklearn.model_selection import train_test_split
