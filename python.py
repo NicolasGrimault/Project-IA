@@ -23,3 +23,17 @@ train['extraction_type'] = train['extraction_type'].map(extraction_type).astype(
 # Drop useless data
 train = train.drop(["id","num_private","recorded_by"], axis = 1)
 
+#%%
+# Split data to train and test
+from sklearn.model_selection import train_test_split
+
+X_alltrain = train.values[:,:36]
+y_alltrain = train.values[:, 37]
+X_train, X_test, y_train, y_test = train_test_split(X_alltrain, y_alltrain, random_state=42)
+
+# %%
+# Define model
+from sklearn.tree import DecisionTreeClassifier
+
+tree_clf = DecisionTreeClassifier(max_depth=4, random_state=42)
+tree_clf.fit(X_train,y_train)
