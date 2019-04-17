@@ -2,7 +2,7 @@
 # Imports Data
 import pandas as pd
 
-train = pd.read_csv('Data/TrainingSetValues.csv', header=0)
+train = pd.read_csv('Data/TrainingSetValues.csv', header=0, sep = ",")
 
 # %%
 # Display data
@@ -18,3 +18,8 @@ extraction_type = { 'gravity': 0, 'submersible':1,'swn 80':2,'nira/tanira':3,'in
 train['status_group'] = train['status_group'].map(status_group).astype(int)
 train['source_class'] = train['source_class'].map(source_class).astype(int)
 train['extraction_type'] = train['extraction_type'].map(extraction_type).astype(int)
+
+# %%
+# Drop useless data
+train = train.drop(["id","num_private","recorded_by"], axis = 1)
+
