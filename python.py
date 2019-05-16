@@ -32,8 +32,6 @@ train.loc[train['installer'] == '0', 'installer'] = 'NAN'
 train.loc[train['longitude'] == 0, 'latitude'] = -6.647724
 train.loc[train['longitude'] == 0, 'longitude'] = 35.022001
 
-#train['longitude'] = train['longitude'].astype(float)
-
 # %%
 #Process string data
 headers = ['funder','installer','wpt_name','basin','subvillage','lga','ward','public_meeting','scheme_name','permit','scheme_management','extraction_type','extraction_type_group','extraction_type_class','management','management_group','payment','payment_type','water_quality','quality_group','quantity','quantity_group','source','source_type','source_class','waterpoint_type','waterpoint_type_group','status_group']
