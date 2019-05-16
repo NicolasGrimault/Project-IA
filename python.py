@@ -25,7 +25,8 @@ train['subvillage'] = train['subvillage'].fillna('NAN')
 train['scheme_name'] = train['scheme_name'].fillna('NAN')
 train['scheme_management'] = train['scheme_management'].fillna('NAN')
 
-
+train.loc[train['longitude'] == 0, 'latitude'] = -6.647724
+train.loc[train['longitude'] == 0, 'longitude'] = 35.022001
 
 train['funder'] = lab_enc.fit_transform(train['funder'])
 train['installer'] = lab_enc.fit_transform(train['installer'])
@@ -62,7 +63,7 @@ train['longitude'] = train['longitude'].astype(float)
 train = train.drop(["id","num_private","recorded_by", "date_recorded", "region"], axis = 1)
 
 
-train.info()
+#train.info()
 
 # %%
 # Replace date
