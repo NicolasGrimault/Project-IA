@@ -3,11 +3,11 @@
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
-lab_enc = preprocessing.LabelEncoder()
-
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
+
+lab_enc = preprocessing.LabelEncoder()
 
 train = pd.read_csv('Data/TrainingSetValues.csv', header=0, sep = ",")
 #train.info()
