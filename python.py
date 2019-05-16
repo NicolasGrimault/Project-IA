@@ -28,34 +28,13 @@ train['scheme_management'] = train['scheme_management'].fillna('NAN')
 train.loc[train['longitude'] == 0, 'latitude'] = -6.647724
 train.loc[train['longitude'] == 0, 'longitude'] = 35.022001
 
-train['funder'] = lab_enc.fit_transform(train['funder'])
-train['installer'] = lab_enc.fit_transform(train['installer'])
-train['wpt_name'] = lab_enc.fit_transform(train['wpt_name'])
-train['basin'] = lab_enc.fit_transform(train['basin'])
-train['subvillage'] = lab_enc.fit_transform(train['subvillage'])
-train['lga'] = lab_enc.fit_transform(train['lga'])
-train['ward'] = lab_enc.fit_transform(train['ward'])
-train['public_meeting'] = lab_enc.fit_transform(train['public_meeting'])
-train['scheme_name'] = lab_enc.fit_transform(train['scheme_name'])
-train['permit'] = lab_enc.fit_transform(train['permit'])
-train['scheme_management'] = lab_enc.fit_transform(train['scheme_management'])
-train['extraction_type'] = lab_enc.fit_transform(train['extraction_type'])
-train['extraction_type_group'] = lab_enc.fit_transform(train['extraction_type_group'])
-train['extraction_type_class'] = lab_enc.fit_transform(train['extraction_type_class'])
-train['management'] = lab_enc.fit_transform(train['management'])
-train['management_group'] = lab_enc.fit_transform(train['management_group'])
-train['payment'] = lab_enc.fit_transform(train['payment'])
-train['payment_type'] = lab_enc.fit_transform(train['payment_type'])
-train['water_quality'] = lab_enc.fit_transform(train['water_quality'])
-train['quality_group'] = lab_enc.fit_transform(train['quality_group'])
-train['quantity'] = lab_enc.fit_transform(train['quantity'])
-train['quantity_group'] = lab_enc.fit_transform(train['quantity_group'])
-train['source'] = lab_enc.fit_transform(train['source'])
-train['source_type'] = lab_enc.fit_transform(train['source_type'])
-train['source_class'] = lab_enc.fit_transform(train['source_class'])
-train['waterpoint_type'] = lab_enc.fit_transform(train['waterpoint_type'])
-train['waterpoint_type_group'] = lab_enc.fit_transform(train['waterpoint_type_group'])
-train['status_group'] = lab_enc.fit_transform(train['status_group'])
+
+headers = ['funder','installer','wpt_name','basin','subvillage','lga','ward','public_meeting','scheme_name','permit','scheme_management','extraction_type','extraction_type_group','extraction_type_class','management','management_group','payment','payment_type','water_quality','quality_group','quantity','quantity_group','source','source_type','source_class','waterpoint_type','waterpoint_type_group','status_group']
+
+for header in headers:
+    train[header] = lab_enc.fit_transform(train[header])
+
+
 #.astype(str)
 train['longitude'] = train['longitude'].astype(float)
 
