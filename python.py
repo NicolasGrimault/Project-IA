@@ -22,9 +22,14 @@ train['management'] = train['management'].map({'company': 0, 'other': 1, 'other 
 train['payment'] = train['payment'].map({'never pay': 0, 'other': 1, 'pay annually': 2, 'pay monthly': 3, 'pay per bucket': 4, 'pay when scheme fails': 5, 'unknown': 6}).astype(int)
 train['longitude'] = train['longitude'].astype(float)
 
+from sklearn import preprocessing
+lab_enc = preprocessing.LabelEncoder()
+
+train['funder'] = lab_enc.fit_transform(train['funder'].astype(str))
+
 # %%
 # Drop useless data
-train = train.drop(["id","num_private","recorded_by"], axis = 1)
+train = train.drop(["id","num_private","recorded_by","funder","wpt_name","subvillage","region","lga","ward","public_meeting","scheme_management","scheme_name","permit","waterpoint_type","waterpoint_type_group","source_type","quality_group","payment_type","management_group","extraction_type_class","extraction_type_group","date_recorded"], axis = 1)
 
 # %%
 # Replace date
@@ -49,5 +54,8 @@ X_train, X_test, y_train, y_test = train_test_split(X_alltrain, y_alltrain, rand
 # Define model
 from sklearn.tree import DecisionTreeClassifier
 
+
+
+y_train_encoded = lab_enc.fit_transform(y_train)
 tree_clf = DecisionTreeClassifier(max_depth=4, random_state=42)
-tree_clf.fit(X_train,y_train)
+tree_clf.fit(X_train,y_train_encoded)
