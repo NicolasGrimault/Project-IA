@@ -10,6 +10,7 @@ from sklearn.metrics import accuracy_score
 lab_enc = preprocessing.LabelEncoder()
 
 train = pd.read_csv('Data/TrainingSetValues.csv', header=0, sep = ",")
+Test = pd.read_csv('Data/TestSetValues.csv', header=0, sep = ",")
 
 # %%
 # Process specific data
