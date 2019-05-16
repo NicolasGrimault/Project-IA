@@ -20,6 +20,7 @@ train['source'] = train['source'].map({'dam': 0, 'hand dtw': 1, 'lake': 2, 'mach
 train['basin'] = train['basin'].map({'Internal': 0, 'Lake Nyasa': 1, 'Lake Rukwa': 2, 'Lake Tanganyika': 3, 'Lake Victoria': 4, 'Pangani': 5, 'Rufiji': 6, 'Ruvuma / Southern Coast': 7, 'Wami / Ruvu': 8}).astype(int)
 train['management'] = train['management'].map({'company': 0, 'other': 1, 'other - school': 2, 'parastatal': 3, 'private operator': 4, 'trust': 5, 'unknown': 6, 'vwc': 7, 'water authority': 8, 'water board': 9, 'wua': 10, 'wug': 11}).astype(int)
 train['payment'] = train['payment'].map({'never pay': 0, 'other': 1, 'pay annually': 2, 'pay monthly': 3, 'pay per bucket': 4, 'pay when scheme fails': 5, 'unknown': 6}).astype(int)
+train['longitude'] = train['longitude'].astype(float)
 
 # %%
 # Drop useless data
@@ -40,8 +41,8 @@ train.loc[train['construction_year'] == 0,'construction_year'] = random_list
 # Split data to train and test
 from sklearn.model_selection import train_test_split
 
-X_alltrain = train.values[:,:36]
-y_alltrain = train.values[:, 37]
+X_alltrain = train.values[:,:train.shape[1]-2]
+y_alltrain = train.values[:, train.shape[1]-1]
 X_train, X_test, y_train, y_test = train_test_split(X_alltrain, y_alltrain, random_state=42)
 
 # %%
