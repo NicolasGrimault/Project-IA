@@ -51,10 +51,16 @@ X_train, X_test, y_train, y_test = train_test_split(X_alltrain, y_alltrain, rand
 
 # %%
 # Define model
-tree_clf = DecisionTreeClassifier(max_depth=4, random_state=42)
-tree_clf.fit(X_train,y_train)
+index_score = 0
+index_i = 0
+for i in range(10,20):
+    tree_clf = DecisionTreeClassifier(max_depth=i, random_state=49)
+    tree_clf.fit(X_train,y_train)
 
-y_pred = tree_clf.predict(X_test)
-score = accuracy_score(y_test, y_pred)
-
-print(score*100)
+    y_pred = tree_clf.predict(X_test)
+    score = accuracy_score(y_test, y_pred)*100
+    if score>index_score:
+        index_score=score
+        index_i = i
+        print(str(index_i) + ' : ' + str(index_score))
+print('END')
