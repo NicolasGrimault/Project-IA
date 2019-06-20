@@ -5,10 +5,11 @@ import numpy as np
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier,VotingClassifier
+from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.metrics import accuracy_score
 from mlxtend.classifier import StackingClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
 
 lab_enc = preprocessing.LabelEncoder()
 
@@ -19,9 +20,6 @@ full_data = [train, Test]
 
 
 def generer_resultats(clf, data=Test.values, idx=Testindex):
-
-    print(clf.get_params())
-
     clf.fit(X_train, y_train)
     prediction = clf.predict(data)
     results = pd.DataFrame(prediction.astype(
@@ -120,9 +118,17 @@ for nbr_estimators in [50, 100, 150]:
 finalforest_clf = RandomForestClassifier(
     n_estimators=index_i[0], max_depth=index_i[1], max_features=index_i[2], n_jobs=-1, random_state=42)
 
-# %% 
-#Prepare models
-for clf in (finaltree_clf, finalforest_clf):
+
+# %%
+# GaussianNB
+gnb_clf = GaussianNB()
+gnb_clf.fit(X_train, y_train)
+y_pred = gnb_clf.predict(X_test)
+print("GaussianNB : "+str(100*accuracy_score(y_test, y_pred)))
+
+# %%
+# Prepare models
+for clf in (finaltree_clf, finalforest_clf, gnb_clf):
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
@@ -133,18 +139,19 @@ voting_soft_clf = VotingClassifier(estimators=[('tr', finaltree_clf),
                                    voting='soft')
 voting_soft_clf.fit(X_train, y_train)
 y_pred = voting_soft_clf.predict(X_test)
-print(str(100*accuracy_score(y_test, y_pred)))
+print("Voting : "+str(100*accuracy_score(y_test, y_pred)))
 
 # %%
 # Stacking
 log_clf = LogisticRegression(random_state=42)
 Stacking_clf = StackingClassifier(classifiers=[
     finaltree_clf,
-    finalforest_clf],
+    finalforest_clf,
+    gnb_clf],
     meta_classifier=log_clf)
 Stacking_clf.fit(X_train, y_train)
 y_pred = Stacking_clf.predict(X_test)
-print(str(100*accuracy_score(y_test, y_pred)))
+print("Stacking : "+ str(100*accuracy_score(y_test, y_pred)))
 
-# generer_resultats(finalforest_clf, Test)
+generer_resultats(voting_soft_clf, Test)
 print('END')
