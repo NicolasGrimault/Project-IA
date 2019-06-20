@@ -80,93 +80,17 @@ y_alltrain = train.values[:, train.shape[1]-1]
 X_train, X_test, y_train, y_test = train_test_split(
     X_alltrain, y_alltrain, random_state=42)
 
-
-# %%
-# Tree
-index_score = 0
-index_i = 0
-for i in range(10, 20):
-    tree_clf = DecisionTreeClassifier(max_depth=i, random_state=49)
-    tree_clf.fit(X_train, y_train)
-
-    y_pred = tree_clf.predict(X_test)
-    score = accuracy_score(y_test, y_pred)*100
-    if score > index_score:
-        index_score = score
-        index_i = i
-        print(str(index_i) + ' : ' + str(index_score))
-
-finaltree_clf = DecisionTreeClassifier(max_depth=index_i, random_state=49)
-
 # %%
 # Forest
-forest_score = 0
-index_i = [0, 0, 0]
-for nbr_estimators in [50, 100]:
-    for depth in range(4, 8):
-        for nbr_features in range(3, 5):
-            rnd_clf = RandomForestClassifier(
-                n_estimators=nbr_estimators, max_depth=depth, max_features=nbr_features, n_jobs=-1, random_state=42)
-            rnd_clf.fit(X_train, y_train)
-            y_pred = rnd_clf.predict(X_test)
-            score = accuracy_score(y_test, y_pred)*100
-            if score > forest_score:
-                forest_score = score
-                index_i = [nbr_estimators, depth, nbr_features]
-                print(str(nbr_estimators) + "-" + str(depth) + "-" +
-                      str(nbr_features) + ' : ' + str(forest_score))
 finalforest_clf = RandomForestClassifier(
-    n_estimators=index_i[0], max_depth=index_i[1], max_features=index_i[2], n_jobs=-1, random_state=42)
+    n_estimators=1000, 
+    max_features='auto', 
+    n_jobs=-1, 
+    random_state=42)
+finalforest_clf.fit(X_train, y_train)
+y_pred = finalforest_clf.predict(X_test)
+print("Forest" + str(accuracy_score(y_test, y_pred)*100))
+    
 
-
-# %%
-# GaussianNB
-
-gnb_clf = GaussianNB()
-gnb_clf.fit(X_train, y_train)
-
-y_pred = gnb_clf.predict(X_test)
-score = accuracy_score(y_test, y_pred)*100
-print("GaussianNB : "+str(100*accuracy_score(y_test, y_pred)))
-
-# %%
-# Prepare models
-for clf in (finaltree_clf, finalforest_clf):
-    clf.fit(X_train, y_train)
-    y_pred = clf.predict(X_test)
-
-# %%
-# Voting soft
-voting_soft_clf = VotingClassifier(estimators=[('tr', finaltree_clf),
-                                               ('rn', finalforest_clf)],
-                                   voting='soft')
-voting_soft_clf.fit(X_train, y_train)
-y_pred = voting_soft_clf.predict(X_test)
-print("Voting : "+str(100*accuracy_score(y_test, y_pred)))
-
-# %%
-# Stacking
-log_clf = LogisticRegression(random_state=42)
-Stacking_clf = StackingClassifier(classifiers=[
-    finaltree_clf,
-    finalforest_clf],
-    meta_classifier=log_clf)
-Stacking_clf.fit(X_train, y_train)
-y_pred = Stacking_clf.predict(X_test)
-print("Stacking : "+ str(100*accuracy_score(y_test, y_pred)))
-
-
-rf = RandomForestClassifier(criterion='gini',
-                            min_samples_split=6,
-                            n_estimators=1000,
-                            max_features='auto',
-                            oob_score=True,
-                            random_state=1,
-                            n_jobs=-1)
-
-rf.fit(X_train, y_train)
-y_pred = rf.predict(X_test)
-print("rf2 : "+str(100*accuracy_score(y_test, y_pred)))
-
-generer_resultats(voting_soft_clf, Test)
+generer_resultats(finalforest_clf, Test)
 print('END')
