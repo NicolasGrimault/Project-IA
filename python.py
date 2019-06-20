@@ -26,7 +26,7 @@ def generer_resultats(clf, data=Test.values, idx=Testindex):
         int), index=idx, columns=['status_group'])
     results['status_group'] = lab_enc.inverse_transform(
         results['status_group'])
-    results.to_csv('resultats%s.csv' % clf.__class__.__name__)
+    results.to_csv('./Data/resultats.csv')
 
 # %%
 # Process specific data
