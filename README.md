@@ -52,9 +52,7 @@ id, num_private, recorded_by, date_recorded, region
 ## Models
 
 The main goal is to predict the state of a pump : functional, non functional or need repaired.    
-It's a classification problem.
+It's a classification problem so the best way seems to be a Random forest.
 
-So let's start with a little decision tree,   
-We process for all depth from 10 to 20 and we kept the one with the best score
 
 
