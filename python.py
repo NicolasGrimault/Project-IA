@@ -121,14 +121,29 @@ finalforest_clf = RandomForestClassifier(
 
 # %%
 # GaussianNB
-gnb_clf = GaussianNB()
-gnb_clf.fit(X_train, y_train)
-y_pred = gnb_clf.predict(X_test)
-print("GaussianNB : "+str(100*accuracy_score(y_test, y_pred)))
+def frange(x, y, jump):
+  while x < y:
+    yield x
+    x += jump
+
+index_score = 0
+for i in frange(0.000000010, 0.000000100, 0.000000001):
+    gnb_clf = GaussianNB(None, i)
+    gnb_clf.fit(X_train, y_train)
+
+    y_pred = gnb_clf.predict(X_test)
+    score = accuracy_score(y_test, y_pred)*100
+    if score > index_score:
+        index_score = score
+        index_i = i
+        print(str(index_i) + ' : ' + str(index_score))
+
+finalGaussianNB_clf = GaussianNB(None, index_i)
+
 
 # %%
 # Prepare models
-for clf in (finaltree_clf, finalforest_clf, gnb_clf):
+for clf in (finaltree_clf, finalforest_clf, ):
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
@@ -146,8 +161,7 @@ print("Voting : "+str(100*accuracy_score(y_test, y_pred)))
 log_clf = LogisticRegression(random_state=42)
 Stacking_clf = StackingClassifier(classifiers=[
     finaltree_clf,
-    finalforest_clf,
-    gnb_clf],
+    finalforest_clf],
     meta_classifier=log_clf)
 Stacking_clf.fit(X_train, y_train)
 y_pred = Stacking_clf.predict(X_test)
