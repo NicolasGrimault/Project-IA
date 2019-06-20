@@ -102,7 +102,7 @@ finaltree_clf = DecisionTreeClassifier(max_depth=index_i, random_state=49)
 # Forest
 forest_score = 0
 index_i = [0, 0, 0]
-for nbr_estimators in [50, 100, 150]:
+for nbr_estimators in [50, 100]:
     for depth in range(4, 8):
         for nbr_features in range(3, 5):
             rnd_clf = RandomForestClassifier(
@@ -121,29 +121,17 @@ finalforest_clf = RandomForestClassifier(
 
 # %%
 # GaussianNB
-def frange(x, y, jump):
-  while x < y:
-    yield x
-    x += jump
 
-index_score = 0
-for i in frange(0.000000010, 0.000000100, 0.000000001):
-    gnb_clf = GaussianNB(None, i)
-    gnb_clf.fit(X_train, y_train)
+gnb_clf = GaussianNB()
+gnb_clf.fit(X_train, y_train)
 
-    y_pred = gnb_clf.predict(X_test)
-    score = accuracy_score(y_test, y_pred)*100
-    if score > index_score:
-        index_score = score
-        index_i = i
-        print(str(index_i) + ' : ' + str(index_score))
-
-finalGaussianNB_clf = GaussianNB(None, index_i)
-
+y_pred = gnb_clf.predict(X_test)
+score = accuracy_score(y_test, y_pred)*100
+print("GaussianNB : "+str(100*accuracy_score(y_test, y_pred)))
 
 # %%
 # Prepare models
-for clf in (finaltree_clf, finalforest_clf, ):
+for clf in (finaltree_clf, finalforest_clf):
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
@@ -166,6 +154,19 @@ Stacking_clf = StackingClassifier(classifiers=[
 Stacking_clf.fit(X_train, y_train)
 y_pred = Stacking_clf.predict(X_test)
 print("Stacking : "+ str(100*accuracy_score(y_test, y_pred)))
+
+
+rf = RandomForestClassifier(criterion='gini',
+                            min_samples_split=6,
+                            n_estimators=1000,
+                            max_features='auto',
+                            oob_score=True,
+                            random_state=1,
+                            n_jobs=-1)
+
+rf.fit(X_train, y_train)
+y_pred = rf.predict(X_test)
+print("rf2 : "+str(100*accuracy_score(y_test, y_pred)))
 
 generer_resultats(voting_soft_clf, Test)
 print('END')
