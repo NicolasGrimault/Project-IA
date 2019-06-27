@@ -62,7 +62,7 @@ We did try to implement some other model like Gaussian or some ensemble methods 
 The next step was to read the others approachs in the competition discussion to discover that our forest classifier has not enough estimators (we started with 50 then 100).
 
 
-So, after some reajusting, here the best model we got 
+So, after some reajusting, here is the best model we got 
 ```python
 finalforest_clf = RandomForestClassifier(
     n_estimators=1000, 
